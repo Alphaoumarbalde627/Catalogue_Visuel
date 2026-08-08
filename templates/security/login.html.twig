@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
+
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+
+
+        <!-- Partie gauche : présentation -->
+        <div class="hidden lg:flex flex-col justify-center bg-gradient-to-br from-[#2b7bc6] to-[#235ea3] p-12 text-white">
+            <div class="mb-8">
+
+                <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur mb-6">
+                    ✦
+                </div>
+                <h2 class="text-4xl font-bold leading-tight">
+                    Bienvenue à nouveau
+                </h2>
+                <p class="mt-5 text-blue-100 text-lg leading-relaxed">
+                    Connectez-vous à votre espace et profitez d’une expérience
+                    fluide, moderne et sécurisée.
+                </p>
+            </div>
+            <div class="mt-8 space-y-4">
+               <div class="flex items-center gap-4 bg-white/10 rounded-2xl p-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/20">
+                        ⚡
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">
+                            Accès rapide
+                        </h3>
+                        <p class="text-sm text-blue-100">
+                            Gestion simple et interface moderne.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/10 rounded-2xl p-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/20">
+                        🔒
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">
+                            Sécurité renforcée
+                        </h3>
+                        <p class="text-sm text-blue-100">
+                            Vos données sont protégées avec une connexion sécurisée.
+                        </p>
+                    </div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4 text-sm text-slate-200">
+                    <p class="font-medium text-base">
+                        Sécurité et simplicité
+                    </p>
+                    <p class="mt-2 text-slate-200 leading-relaxed">
+                        Profitez d’un espace moderne conçu pour simplifier votre
+                        gestion quotidienne avec une expérience rapide, intuitive
+                        et professionnelle.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Partie droite : formulaire -->
+        <div class="p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+            <div class="mb-8 text-center">
+                <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl">
+                    🔐
+                </div>
+                <h1 class="text-3xl font-bold text-slate-900">
+                    Connexion
+                </h1>
+                <p class="mt-2 text-sm text-slate-500">
+                    Saisissez vos identifiants pour continuer
+                </p>
+            </div>
+            {{ form_start(login_form, {'attr': {'class': 'space-y-5'}}) }}
+
+
+
+                {% if error %}
+
+                    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+
+                    </div>
+
+                {% endif %}
+
+
+
+
+
+
+                <div>
+                    {{ form_label(login_form.email, null, {'label_attr': {'class': 'mb-2 block text-sm font-medium text-slate-700'}}) }}
+                    {{ form_widget(login_form.email, {'attr': {'value': last_username}}) }}
+                </div>
+
+
+
+
+
+
+
+                <div>
+                    {{ form_label(login_form.password, null, {'label_attr': {'class': 'mb-2 block text-sm font-medium text-slate-700'}}) }}
+                    {{ form_widget(login_form.password) }}
+                </div>
+                {{ form_widget(login_form._csrf_token) }}
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center gap-2 text-slate-600">
+                        {{ form_widget(login_form._remember_me) }}
+                        Se souvenir de moi
+                    </label>
+
+
+
+
+
+                    <a href="#" class="text-[#2b7bc6] hover:text-[#235ea3]">
+
+                        Mot de passe oublié ?
+
+                    </a>
+
+
+
+                </div>
+
+
+
+
+
+
+
+                {{ form_widget(login_form.submit) }}
+
+
+
+
+
+            {{ form_end(login_form) }}
+
+
+
+
+
+
+
+
+            <div class="mt-8 flex flex-col items-center justify-center gap-4 text-sm text-slate-500">
+
+
+
+                <p>
+
+
+                    Vous n'avez pas encore de compte ?
+
+
+                    <a href="{{ path('app_register') }}"
+                       class="font-semibold text-[#2b7bc6] transition hover:text-[#235ea3]">
+
+                        Créer un compte
+
+                    </a>
+
+
+                </p>
+
+
+
+
+
+
+
+                <a href="{{ path('app_home') }}"
+                   class="rounded-full border border-[#dce9f8] bg-white px-5 py-3 text-xs uppercase tracking-[0.24em] text-[#1f324d] transition hover:border-[#2b7bc6]">
+
+                    Retour à l'accueil
+
+                </a>
+
+
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
