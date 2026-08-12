@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le produit{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#f7f0e6] text-[#1f324d]">
+    <div class="max-w-3xl mx-auto px-8 py-10">
+        <div class="mb-8">
+            <h1 class="text-3xl font-semibold">Modifier le produit</h1>
+            <p class="mt-2 text-sm text-[#5b718e]">Modifiez les données du produit et remplacez l'image si besoin.</p>
+        </div>
+
+        {{ form_start(productForm, {'attr': {'class': 'space-y-6', 'data-turbo': 'false'}, 'multipart': true}) }}
+            {{ form_errors(productForm) }}
+            <div class="grid gap-6">
+                <div>
+                    {{ form_label(productForm.reference) }}
+                    {{ form_widget(productForm.reference, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                </div>
+                <div>
+                    {{ form_label(productForm.designation) }}
+                    {{ form_widget(productForm.designation, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                </div>
+                <div>
+                    {{ form_label(productForm.description) }}
+                    {{ form_widget(productForm.description, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                </div>
+                <div>
+                    {{ form_label(productForm.imageFiles) }}
+                    {% if product.images|length > 0 %}
+                        <div class="mb-4 grid grid-cols-3 gap-3">
+                            {% for image in product.images %}
+                                <img src="/image/{{ image }}" alt="{{ product.designation }}" class="h-24 w-full rounded-md object-cover border border-slate-200" />
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {{ form_widget(productForm.imageFiles, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                    {{ form_errors(productForm.imageFiles) }}
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button class="rounded-full bg-[#2b7bc6] px-6 py-3 text-sm text-white hover:bg-[#235ea3]" type="submit">Mettre à jour</button>
+                <a href="{{ path('app_dashboard') }}" class="rounded-full border border-[#dce9f8] px-6 py-3 text-sm text-[#1f324d]">Annuler</a>
+            </div>
+        {{ form_end(productForm) }}
+    </div>
+</div>
+{% endblock %}

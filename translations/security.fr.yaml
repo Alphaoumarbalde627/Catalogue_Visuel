@@ -1,0 +1,7 @@
+# French translations for security messages
+Invalid credentials.: "Identifiants incorrects."
+Invalid CSRF token.: "Jeton CSRF invalide."
+Account is disabled.: "Le compte est désactivé."
+Account is locked.: "Le compte est verrouillé."
+Account credentials have expired.: "Les identifiants du compte ont expiré."
+Account does not exist.: "Le compte n'existe pas."

@@ -33,9 +33,7 @@ class LoginFormType extends AbstractType
                     'class' => 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2b7bc6] focus:bg-white focus:ring-4 focus:ring-blue-100',
                 ],
             ])
-            ->add('_csrf_token', HiddenType::class, [
-                'mapped' => false,
-            ])
+            // CSRF field is handled by the form system via options (see configureOptions)
             ->add('_remember_me', CheckboxType::class, [
                 'label' => 'Se souvenir de moi',
                 'required' => false,
@@ -56,6 +54,9 @@ class LoginFormType extends AbstractType
         $resolver->setDefaults([
             'method' => 'POST',
             'attr' => ['class' => 'space-y-5'],
+            'csrf_protection' => true,
+            'csrf_field_name' => '_csrf_token',
+            'csrf_token_id' => 'authenticate',
         ]);
     }
 }
