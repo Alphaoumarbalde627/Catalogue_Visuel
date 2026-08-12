@@ -28,15 +28,36 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        // Extract submitted data in a robust way (support nested form names)
+        $data = $request->request->all();
+
+        $find = function (array $arr, string $key) use (&$find) {
+            foreach ($arr as $k => $v) {
+                if ($k === $key) {
+                    return $v;
+                }
+                if (is_array($v)) {
+                    $res = $find($v, $key);
+                    if ($res !== null) {
+                        return $res;
+                    }
+                }
+            }
+
+            return null;
+        };
+
+        $email = $find($data, 'email') ?? $request->request->get('email', '');
+        $password = $find($data, 'password') ?? $request->request->get('password', '');
+        $csrfToken = $find($data, '_csrf_token') ?? $find($data, '_token') ?? $request->request->get('_csrf_token') ?? $request->request->get('_token');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $csrfToken),
                 new RememberMeBadge(),
             ]
         );
@@ -48,9 +69,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
     }
 
     protected function getLoginUrl(Request $request): string

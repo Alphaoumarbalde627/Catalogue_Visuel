@@ -21,7 +21,6 @@ class SecurityController extends AbstractController
             'action' => $this->generateUrl('app_login'),
         ]);
         $form->get('email')->setData($lastUsername);
-        $form->get('_csrf_token')->setData($csrfTokenManager->getToken('authenticate')->getValue());
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
