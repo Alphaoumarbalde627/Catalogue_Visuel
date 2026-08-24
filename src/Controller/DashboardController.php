@@ -14,10 +14,11 @@ final class DashboardController extends AbstractController
     {
 
         $products = $productRepository->findAll();
+        $productc = count($products);
 
         return $this->render('dashboard/index.html.twig', [
             'products' => $products,
-            'products_count' => count($products),
+            'products_count' => $productc
         ]);
     }
 }

@@ -62,7 +62,6 @@ class ProductController extends AbstractController
     {
         $form = $this->createForm(ProductType::class, $product, ['is_edit' => true]);
         $form->handleRequest($request);
-        $originalImage = $product->getImages();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFiles = $form->get('imageFiles')->getData();
