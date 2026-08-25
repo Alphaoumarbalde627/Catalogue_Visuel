@@ -38,6 +38,7 @@ class Product
     private array $images = [];
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'La description est obligatoire.')]
     #[Assert\Length(
         max: 255,
         maxMessage: 'La description ne peut pas faire plus de {{ limit }} caractères',
