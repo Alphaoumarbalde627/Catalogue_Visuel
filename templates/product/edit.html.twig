@@ -3,19 +3,20 @@
 {% block title %}Modifier le produit{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#f7f0e6] text-[#1f324d]">
+{% include "dashboard/partials/header.html.twig"%}
+<div class="col-span-12 lg:col-span-9">
     <div class="max-w-3xl mx-auto px-8 py-10">
         <div class="mb-8">
             <h1 class="text-3xl font-semibold">Modifier le produit</h1>
             <p class="mt-2 text-sm text-[#5b718e]">Modifiez les données du produit et remplacez l'image si besoin.</p>
         </div>
-
         {{ form_start(productForm, {'attr': {'class': 'space-y-6', 'data-turbo': 'false'}, 'multipart': true}) }}
             {{ form_errors(productForm) }}
             <div class="grid gap-6">
                 <div>
                     {{ form_label(productForm.reference) }}
                     {{ form_widget(productForm.reference, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                    {{ form_errors(productForm.reference, {'attr': {'class': 'text-red-500'}}) }}
                 </div>
                 <div>
                     {{ form_label(productForm.designation) }}

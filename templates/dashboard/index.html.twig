@@ -3,33 +3,8 @@
 {% block title %}Administration — Catalogue{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#f7f0e6] text-[#1f324d]">
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-[#0f0d0c] text-[#f6eedd]">
-            <div class="flex items-center justify-between px-8 py-6">
-                <div class="flex items-center gap-6">
-                    <h1 class="text-2xl font-medium">Administration</h1>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="text-sm uppercase tracking-[0.24em] text-[#cbb891]">{{ products_count }} PRODUITS</div>
-                    
-                </div>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-12 gap-6 px-8 py-10">
-            <aside class="col-span-12 lg:col-span-3">
-                <div class="rounded-md bg-[#0f0d0c] p-6 text-[#cbb891] min-h-[640px] flex flex-col">
-                    <nav class="space-y-6">
-                        <a href="{{ path('app_product_index') }}" class="block rounded px-4 py-3 bg-[#161413] text-[#f6eedd]">Tous les produits</a>
-                        <a href="{{ path('app_product_new') }}" class="block px-4 py-3 text-[#cbb891]/80">Ajouter un produit</a>
-                    </nav>
-
-                    <div class="mt-auto pt-6">
-                        <a href="{{ path('app_logout') }}" class="inline-block w-full text-center rounded-full bg-[#2b7bc6] px-4 py-2 text-sm text-white hover:bg-[#235ea3]">Se déconnecter</a>
-                    </div>
-                </div>
-            </aside>
+{% include 'dashboard/partials/header.html.twig' %}
 
             <main class="col-span-12 lg:col-span-9">
                 <div class="bg-[#f6efe4] p-10 rounded-md">

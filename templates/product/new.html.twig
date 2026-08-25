@@ -3,7 +3,8 @@
 {% block title %}Ajouter un produit{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#f7f0e6] text-[#1f324d]">
+{% include "dashboard/partials/header.html.twig"%}
+<div class="col-span-12 lg:col-span-9">
     <div class="max-w-3xl mx-auto px-8 py-10">
         <div class="mb-8">
             <h1 class="text-3xl font-semibold">Ajouter un produit</h1>
@@ -16,14 +17,17 @@
                 <div>
                     {{ form_label(productForm.reference) }}
                     {{ form_widget(productForm.reference, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                    {{ form_errors(productForm.reference, {'attr': {'class': 'text-red-700'}}) }}
                 </div>
                 <div>
                     {{ form_label(productForm.designation) }}
                     {{ form_widget(productForm.designation, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                    {{ form_errors(productForm.designation, {'attr': {'class': 'text-red-500'}}) }}
                 </div>
                 <div>
                     {{ form_label(productForm.description) }}
                     {{ form_widget(productForm.description, {'attr': {'class': 'w-full rounded-md border border-slate-200 bg-white px-4 py-3'}}) }}
+                    {{ form_errors(productForm.description, {'attr': {'class': 'text-red-500'}}) }}
                 </div>
                 <div>
                     {{ form_label(productForm.imageFiles) }}
