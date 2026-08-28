@@ -78,8 +78,6 @@
             </div>
             {{ form_start(login_form, {'attr': {'class': 'space-y-5'}}) }}
 
-
-
                 {% if error %}
 
                     <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -90,20 +88,10 @@
 
                 {% endif %}
 
-
-
-
-
-
                 <div>
                     {{ form_label(login_form.email, null, {'label_attr': {'class': 'mb-2 block text-sm font-medium text-slate-700'}}) }}
                     {{ form_widget(login_form.email, {'attr': {'value': last_username}}) }}
                 </div>
-
-
-
-
-
 
 
                 <div>
@@ -121,31 +109,23 @@
 
 
 
-                    <a href="#" class="text-[#2b7bc6] hover:text-[#235ea3]">
-
+                <a href="{{ path('app_forgot_password') }}" class="text-[#2b7bc6] hover:text-[#235ea3]">
                         Mot de passe oublié ?
-
-                    </a>
-
+                </a>
 
 
                 </div>
 
 
-
-
-
-
+                  <!-- reCAPTCHA v2 -->
+                <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
 
                 {{ form_widget(login_form.submit) }}
-
-
-
-
 
             {{ form_end(login_form) }}
 
 
+                
 
 
 
@@ -153,27 +133,6 @@
 
 
             <div class="mt-8 flex flex-col items-center justify-center gap-4 text-sm text-slate-500">
-
-
-
-                <p>
-
-
-                    Vous n'avez pas encore de compte ?
-
-
-                    <a href="{{ path('app_register') }}"
-                       class="font-semibold text-[#2b7bc6] transition hover:text-[#235ea3]">
-
-                        Créer un compte
-
-                    </a>
-
-
-                </p>
-
-
-
 
 
 
