@@ -36,6 +36,20 @@ class ProductRepository extends ServiceEntityRepository
         );
     }
 
+    public function paginatoreproductclientSearch(int $page, ?string $search): PaginationInterface
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+        $search = trim((string) $search);
+
+        if ($search !== '') {
+            $queryBuilder
+                ->andWhere('LOWER(r.designation) LIKE LOWER(:search) OR LOWER(r.reference) LIKE LOWER(:search) OR LOWER(r.description) LIKE LOWER(:search)')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $this->paginator->paginate($queryBuilder, $page, 3);
+    }
+
     public function countProducts(): int
     {
         return (int) $this->createQueryBuilder('p')
