@@ -1,0 +1,57 @@
+{% set success_messages = app.flashes('success') %}
+{% set error_messages = app.flashes('error') %}
+{% set warning_messages = app.flashes('warning') %}
+{% set info_messages = app.flashes('info') %}
+
+{% if success_messages or error_messages or warning_messages or info_messages %}
+    <div class="pointer-events-none fixed inset-x-0 top-4 z-50 flex flex-col items-center gap-3 px-4">
+        {% for message in success_messages %}
+            <div class="flash-message pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-lg transition-all duration-500">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-lg font-bold text-white">
+                    ✓
+                </div>
+                <p class="text-sm leading-relaxed">{{ message }}</p>
+            </div>
+        {% endfor %}
+
+        {% for message in error_messages %}
+            <div class="flash-message pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-900 shadow-lg transition-all duration-500">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-red-500 text-lg font-bold text-white">
+                    !
+                </div>
+                <p class="text-sm leading-relaxed">{{ message }}</p>
+            </div>
+        {% endfor %}
+
+        {% for message in warning_messages %}
+            <div class="flash-message pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-amber-900 shadow-lg transition-all duration-500">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-lg font-bold text-white">
+                    ⚠
+                </div>
+                <p class="text-sm leading-relaxed">{{ message }}</p>
+            </div>
+        {% endfor %}
+
+        {% for message in info_messages %}
+            <div class="flash-message pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 text-blue-900 shadow-lg transition-all duration-500">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-lg font-bold text-white">
+                    i
+                </div>
+                <p class="text-sm leading-relaxed">{{ message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.flash-message').forEach((message) => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-10px)';
+
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            });
+        }, 4000);
+    </script>
+{% endif %}

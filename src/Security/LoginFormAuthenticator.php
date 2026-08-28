@@ -15,6 +15,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use App\Security\RecaptchaVerifier;
+use App\Services\FlashMessageService;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,7 +25,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator,
+    private readonly RecaptchaVerifier $recaptchaVerifier,
+    private readonly FlashMessageService $flashMessageService)
     {
     }
 
@@ -51,25 +56,76 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $password = $find($data, 'password') ?? $request->request->get('password', '');
         $csrfToken = $find($data, '_csrf_token') ?? $find($data, '_token') ?? $request->request->get('_csrf_token') ?? $request->request->get('_token');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+        $rememberMe = (bool) $find($data, '_remember_me');
+       
+        // Mémorise le dernier email utilisé
+        $request->getSession()->set(
+            SecurityRequestAttributes::LAST_USERNAME,
+            $email
+        );
+
+        
+         /*
+         * Vérification reCAPTCHA
+         */
+        $token = $request->request->get('g-recaptcha-response');
+        if (!$token) {
+            throw new CustomUserMessageAuthenticationException(
+            'Veuillez effectuer la vérification reCAPTCHA.'
+            );
+        }
+
+       if (!$this->recaptchaVerifier->verify(
+            $token,
+            $request->getClientIp()
+        )) 
+        {
+            throw new CustomUserMessageAuthenticationException(
+                'La vérification reCAPTCHA a échoué. Veuillez réessayer.'
+            );
+        }
+
+        // Badge CSRF
+        $badges = [
+            new CsrfTokenBadge('authenticate', $csrfToken),
+        ];
+
+        // Badge "Se souvenir de moi"
+        if ($rememberMe) {
+            $rememberMeBadge = new RememberMeBadge();
+            $rememberMeBadge->enable();
+
+            $badges[] = $rememberMeBadge;
+        }
 
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($password),
-            [
-                new CsrfTokenBadge('authenticate', $csrfToken),
-                new RememberMeBadge(),
-            ]
+            $badges
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        string $firewallName
+    ): ?Response {
+
+        $this->flashMessageService->success(
+            'Connexion réussie avec succès.'
+        );
+        if (
+            $targetPath = $this->getTargetPath(
+                $request->getSession(),
+                $firewallName
+            )
+        ) {
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
+        return new RedirectResponse(
+            $this->urlGenerator->generate('app_dashboard')
+        );
     }
 
     protected function getLoginUrl(Request $request): string

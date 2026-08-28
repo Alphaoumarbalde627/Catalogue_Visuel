@@ -1,6 +1,5 @@
 <div class="min-h-screen bg-[#f7f0e6] text-[#1f324d]">
     <div class="max-w-7xl mx-auto">
-
         <div class="bg-[#0f0d0c] text-[#f6eedd]">
             <div class="flex items-center justify-between px-8 py-6">
                 <h1 class="text-2xl font-medium">
@@ -33,12 +32,15 @@
                         >
                             Ajouter un produit
                         </a>
+                        <a href="{{ path('app_register') }}" class="block px-4 py-3 text-[#cbb891]/80">
+                            Ajouter un utilisateur
+                        </a>
                     </nav>
 
                     <div class="mt-auto pt-6">
                         <a
                             href="{{ path('app_logout') }}"
-                            class="inline-block w-full text-center rounded-full bg-[#2b7bc6] px-4 py-2 text-sm text-white hover:bg-[#235ea3]"
+                            class="inline-block w-full text-center rounded-full bg-red px-4 py-2 text-sm text-white hover:bg-[#235ea3]"
                         >
                             Se déconnecter
                         </a>

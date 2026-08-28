@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\Product;
 use App\Form\ProductType;
@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/product', name: 'app_product_')]
+#[Route('/admin/product', name: 'app_product_')]
+#[IsGranted('ROLE_ADMIN')]
 class ProductController extends AbstractController
 {
     private function getUploadDirectory(): string
@@ -48,7 +50,10 @@ class ProductController extends AbstractController
 
             $em->persist($product);
             $em->flush();
-
+            $this->addFlash(
+                'success',
+                'Article ajouté avec succès'
+            );
             return $this->redirectToRoute('app_dashboard');
         }
 
@@ -72,7 +77,10 @@ class ProductController extends AbstractController
             }
 
             $em->flush();
-
+            $this->addFlash(
+                'success',
+                'Article modifié avec succès'
+            );
             return $this->redirectToRoute('app_dashboard');
         }
 
@@ -89,6 +97,16 @@ class ProductController extends AbstractController
             $this->deleteExistingFiles($product->getImages());
             $em->remove($product);
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Suppression effectuée avec succès.'
+            );
+        } else {
+            $this->addFlash(
+                'error',
+                'La suppression a échoué. Veuillez réessayer.'
+            );
         }
 
         return $this->redirectToRoute('app_dashboard');
