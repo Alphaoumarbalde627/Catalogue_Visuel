@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.designation }} – Galerie{% endblock %}
+
+{% block body %}
+<div class="fixed top-0 right-0 bottom-0 left-0 z-[9999999] flex min-h-screen flex-col overflow-hidden bg-[#171717] text-white">
+    <header class="relative z-10 flex h-[135px] shrink-0 items-center justify-between bg-[#171717] px-[3.6vw] max-md:h-24 max-md:px-4">
+        <a
+            href="{{ path('app_home', {page: app.request.query.get('from_page', 1)}) }}"
+            class="cursor-pointer border border-[#2b7bc6] bg-transparent px-6 py-4 text-sm uppercase tracking-[0.22em] text-[#8fc5f5] transition hover:bg-[#2b7bc6] hover:text-white max-md:px-3.5 max-md:py-3 max-md:text-[11px] max-md:tracking-[0.12em]"
+        >
+            ← Retour
+        </a>
+
+        <div class="text-center max-md:hidden">
+            <p class="font-serif text-xl tracking-[0.25em] text-[#2b7bc6]">M.P.D ET FRERES</p>
+            <p class="mt-1 text-[10px] uppercase tracking-[0.45em] text-[#9e9e9e]">Galerie de meubles</p>
+        </div>
+
+        <button
+            type="button"
+            data-gallery-action="fullscreen"
+            class="cursor-pointer border border-[#2b7bc6] bg-transparent px-6 py-4 text-sm uppercase tracking-[0.22em] text-[#8fc5f5] transition hover:bg-[#2b7bc6] hover:text-white max-md:px-3.5 max-md:py-3 max-md:text-[11px] max-md:tracking-[0.12em]"
+        >
+            ⛶ Plein écran
+        </button>
+    </header>
+
+    <main class="grid min-h-0 flex-1 grid-cols-[70%_30%] max-md:grid-cols-1 max-md:grid-rows-[minmax(0,1fr)_auto]">
+        <section class="relative flex min-h-0 min-w-0 items-center justify-center bg-[#dededb]">
+            <button
+                type="button"
+                aria-label="Image précédente"
+                data-gallery-action="previous"
+                class="absolute left-6 top-1/2 z-10 flex h-20 w-20 -translate-y-1/2 items-center justify-center bg-[#1f324d]/85 text-4xl text-[#8fc5f5] transition hover:bg-[#2b7bc6] hover:text-white max-md:left-3 max-md:h-14 max-md:w-14"
+            >
+                ‹
+            </button>
+
+            <img
+                id="gallery-image"
+                src="/image/{{ product.images|first }}"
+                alt="{{ product.designation }}"
+                data-images="{{ product.images|json_encode|e('html_attr') }}"
+                class="max-h-[calc(100%-48px)] max-w-[calc(100%-180px)] object-contain max-md:max-h-[calc(100%-32px)] max-md:max-w-[calc(100%-100px)]"
+            >
+
+            <button
+                type="button"
+                aria-label="Image suivante"
+                data-gallery-action="next"
+                class="absolute right-6 top-1/2 z-10 flex h-20 w-20 -translate-y-1/2 items-center justify-center bg-[#1f324d]/85 text-4xl text-[#8fc5f5] transition hover:bg-[#2b7bc6] hover:text-white max-md:right-3 max-md:h-14 max-md:w-14"
+            >
+                ›
+            </button>
+        </section>
+
+        <aside class="flex min-h-0 flex-col justify-between overflow-y-auto bg-[#f5f1e8] px-[3.2vw] pb-[2vw] pt-[4.2vw] text-[#171717] max-md:max-h-[42vh] max-md:p-6">
+            <div>
+                <p class="text-xs uppercase tracking-[0.35em] text-[#c8a94e]">{{ product.reference }}</p>
+                <h1 class="mt-6 font-serif text-4xl leading-tight sm:text-5xl">{{ product.designation }}</h1>
+                <div class="my-8 flex items-center gap-3 text-[#c8a94e]">
+                    <span class="h-px flex-1 bg-[#d9c895]"></span>
+                    <span>◆</span>
+                    <span class="h-px flex-1 bg-[#d9c895]"></span>
+                </div>
+                <p class="text-base leading-8 text-[#6d6b66]">{{ product.description }}</p>
+            </div>
+
+            <div class="mt-10">
+                <p id="gallery-counter" class="mb-4 text-xs uppercase tracking-[0.3em] text-[#aaa69e]"></p>
+                <div id="gallery-thumbnails" class="grid grid-cols-3 gap-3">
+                    {% for image in product.images %}
+                        <button
+                            type="button"
+                            aria-label="Afficher la photo {{ loop.index }}"
+                            data-gallery-action="thumbnail"
+                            data-gallery-index="{{ loop.index0 }}"
+                            class="gallery-thumbnail h-20 overflow-hidden border-2 {{ loop.first ? 'border-[#2b7bc6]' : 'border-transparent' }}"
+                        >
+                            <img src="/image/{{ image }}" alt="Photo {{ loop.index }}" class="h-full w-full object-cover">
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+    </main>
+</div>
+
+{% endblock %}

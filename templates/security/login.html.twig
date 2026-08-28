@@ -90,13 +90,23 @@
 
                 <div>
                     {{ form_label(login_form.email, null, {'label_attr': {'class': 'mb-2 block text-sm font-medium text-slate-700'}}) }}
-                    {{ form_widget(login_form.email, {'attr': {'value': last_username}}) }}
+                    {{ form_widget(login_form.email, {'attr': {
+                        'value': last_username,
+                        'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2b7bc6] focus:bg-white focus:ring-4 focus:ring-blue-100'
+                    }}) }}
                 </div>
 
 
                 <div>
                     {{ form_label(login_form.password, null, {'label_attr': {'class': 'mb-2 block text-sm font-medium text-slate-700'}}) }}
-                    {{ form_widget(login_form.password) }}
+                    <div class="relative" data-password-toggle>
+                        {{ form_widget(login_form.password, {'attr': {
+                            'class': 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm outline-none transition focus:border-[#2b7bc6] focus:bg-white focus:ring-4 focus:ring-blue-100'
+                        }}) }}
+                        <button type="button" data-password-toggle-button aria-label="Afficher le mot de passe" class="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-400 transition hover:text-[#2b7bc6]">
+                            <svg aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5" stroke-width="1.8"/></svg>
+                        </button>
+                    </div>
                 </div>
                 {{ form_widget(login_form._csrf_token) }}
                 <div class="flex items-center justify-between text-sm">
