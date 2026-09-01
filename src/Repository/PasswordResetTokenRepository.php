@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\PasswordResetToken;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,22 @@ class PasswordResetTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, PasswordResetToken::class);
     }
 
-//    /**
-//     * @return PasswordResetToken[] Returns an array of PasswordResetToken objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return PasswordResetToken[]
+     */
+    public function findActiveByUser(
+        User $user,
+        ?\DateTimeImmutable $now = null
+    ): array {
+        $now ??= new \DateTimeImmutable();
 
-//    public function findOneBySomeField($value): ?PasswordResetToken
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = :user')
+            ->andWhere('p.expiresAt > :now')
+            ->setParameter('user', $user)
+            ->setParameter('now', $now)
+            ->orderBy('p.expiresAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

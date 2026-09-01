@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\PasswordResetToken;
 use App\Entity\User;
+use App\Repository\PasswordResetTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -14,12 +15,19 @@ class PasswordResetService
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly MailerInterface $mailer,
-        private readonly UrlGeneratorInterface $urlGenerator
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly PasswordResetTokenRepository $passwordResetTokenRepository,
     ) {
     }
 
     public function createToken(User $user): string
     {
+        $activeTokens = $this->passwordResetTokenRepository->findActiveByUser($user);
+
+        foreach ($activeTokens as $activeToken) {
+            $this->entityManager->remove($activeToken);
+        }
+
         $token = bin2hex(random_bytes(32));
 
         $passwordResetToken = new PasswordResetToken();
